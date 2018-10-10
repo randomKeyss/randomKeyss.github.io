@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<h1>Quote Machine</h1>
+<div class = machine>
+  <div class = left>
+    <div class = "slot"></div>
+    <div class = "lever"></div>
+    <div class = "handle"></div>
+  </div>
+  <div class = "right">
+    <div class = "text"><h2></h2></div>
+    <div class = "author"><h2></h2></div>
+    <div class = "twitter"></div>
+    <div class = "bookface"></div>
+    <div class = "right-bottom"></div>
+    <div class = "right-right"></div>
+  </div>
+</div>
+<style>
+h1{
+  position:absolute;
+  top:0;
+  left:30vw;
+  font-size:5vw;
+  font-family:"courier new", "courier", monospace;
+}
+.machine{
+  position:absolute;
+  top:10vw;
+  left:10vw;
+  width:80vw;
+  height:30vw;
+  background-color:#888;
+}
+.left{
+  position:absolute;
+  top:0;
+  left:0;
+  width:20%;
+  height:100%;
+  background-color:#bbb;
+}
+.right{
+  position:absolute;
+  top:0;
+  left:20%;
+  width:80%;
+  height:100%;
+  background-color:#888;
+}
+.right-bottom{
+  position:absolute;
+  bottom:0;
+  left:0%;
+  width:100%;
+  height:1%;
+  background-color:#000;
+}
+.right-right{
+  position:absolute;
+  top:0;
+  right:0%;
+  width:.5%;
+  height:100%;
+  background-color:#555;
+}
+.slot{
+  position:absolute;
+  top:20%;
+  left:48%;
+  width:4%;
+  height:60%;
+  background-color:#000;
+}
+.lever{
+  position:absolute;
+  top:44%;
+  left:-22%;
+  width:70%;
+  height:12%;
+  background-color:#000;
+  -ms-transform: skew(0deg,30deg);
+  -webkit-transform: skew(0deg,30deg);
+  transform: skew(0deg,30deg);
+  transform-origin: 100% 50%;
+  -ms-transform-origin: 100% 50%;
+  -webkit-transform-origin: 100% 50%;
+}
+.handle{
+    background-color:red;
+  position:absolute;
+  top:20%;
+  left:-38.75%;
+  height:20%;
+  width:37.5%;
+  border-radius:50%;
+}
+@keyframes skew{
+  0%{
+    transform:skewY(30deg);
+  }
+  50%{
+    transform:skewY(-30deg);
+  }
+  100%{
+    transform:skewY(30deg);
+  }
+}
+.anim{
+  animation:skew 2s;
+}
+@keyframes buttonanimation{
+  0%{
+    top:20%;
+  }
+  50%{
+    top:60%;
+  }
+  100%{
+    top:20%;
+  }
+}
+.anim2{
+  animation:buttonanimation 2s;
+}
+@keyframes rbanimation{
+  0%{
+    height:1%;
+  }
+  25%{
+    height:100%;
+  }
+  75%{
+    height:100%;
+  }
+  100%{
+    height:1%;
+  }
+}
+.anim3{
+  animation:rbanimation 4s;
+}
+@keyframes rranimation{
+  0%{
+    width:1%;
+  }
+  50%{
+    width:100%;
+  }
+  100%{
+    width:1%;
+  }
+}
+.anim4{
+  animation:rranimation 2s;
+}
+.text{
+  padding-left:5%;
+  font-size:1.5vw;
+  font-family:"courier new", "courier", monospace;
+}
+</style>
+<script>
+$(document).ready(function(){
+  var ddd = 0;
+  var ran = 0;
+  var quotenum = 0;
+  var quote = "";
+  var auth = "";
+  var quotes = [["You know you’re in love when you can’t fall asleep because reality is finally better than your dreams.","Dr. Suess"],["Get busy living or get busy dying.","Stephen King"],["Twenty years from now you will be more disappointed by the things that you didn’t do than by the ones you did do.","Mark Twain"],["Great minds discuss ideas; average minds discuss events; small minds discuss people.","Eleanor Roosevelt"],["I’m a success today because I had a friend who believed in me and I didn’t have the heart to let him down.","Abraham Lincoln"],["Love is a serious mental disease.","Plato"]];
+  $('.handle').click(function(){
+    if(ddd===0){
+      ddd=1;
+      $(".handle").addClass("anim2");
+      $(".lever").addClass("anim").delay(2000).queue(function(next){
+        $(".lever").removeClass("anim");
+        $(".handle").removeClass("anim2");
+        $(".right-bottom").addClass("anim3").delay(1000).queue(function(next){
+          $(".right-right").addClass("anim4").delay(2000).queue(function(next){
+            quotenum = Math.floor(Math.random()*quotes.length);
+            quote = quotes[quotenum][0];
+            auth = quotes[quotenum][1];
+            $(".text").replaceWith("<div class = 'text'><h2>" + quote + "</h2></div>");
+            $(".author").replaceWith("<div class = 'author'><div class = 'text'><h2>-" + auth + "</h2></div></div>");
+            $(".right-right").removeClass("anim4").delay(1000).queue(function(next){
+              $(".right-bottom").removeClass("anim3")
+              next();
+            });
+            ddd=0;
+            next();
+          });
+          next();
+        });
+        next();
+      });
+    };
+  });
+
+});
+</script>
+</html>
