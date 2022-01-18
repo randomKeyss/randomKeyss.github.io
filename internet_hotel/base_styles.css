@@ -1,0 +1,46 @@
+:root {
+    --arrow-width: 10vw;
+    --arrow-height: 2*var(--arrow-width);
+    --arrow-border-offset: 2vw;
+}
+
+body {
+    background-color: blanchedalmond;
+}
+
+h1 {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    left: 0%;
+    font-size: 25px;
+    top: calc(50% - 1.5*25px);
+}
+
+.arrow {
+    position: absolute;
+}
+#left_arrow {
+    top: calc(50% - var(--arrow-height)/2);
+    left: var(--arrow-border-offset);
+    width: var(--arrow-width);
+    height: var(--arrow-height);
+}
+#right_arrow {
+    top: calc(50% - var(--arrow-height)/2);
+    right: var(--arrow-border-offset);
+    width: var(--arrow-width);
+    height: var(--arrow-height);
+}
+#down_arrow {
+    bottom: var(--arrow-border-offset);
+    left: calc(50% - var(--arrow-height)/2);
+    width: var(--arrow-height);
+    height: var(--arrow-width);
+}
+#up_arrow {
+    top: var(--arrow-border-offset);
+    left: calc(50% - var(--arrow-height)/2);
+    width: var(--arrow-height);
+    height: var(--arrow-width);
+}
