@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Peter's Webside</title>
+
+</head>
+<body>
+    <H1>Peter's Idea Maker</H1>
+    <div>
+        <span>
+            Choose your topic: 
+        </span>
+        <select name="topics" id="topic_chooser">
+            <option value="Politics">Politics</option>
+            <option value="Philosophy">Philosophy</option>
+            <option value="Art">Art</option>
+            <option value="Architecture">Architecture</option>
+        </select>
+    </div>
+    <br>
+    
+
+    <button type="button" onclick="makeTopic()">Make idea</button>
+
+    <br>
+    <br>
+    <br>
+
+    <h3 id="idea">
+
+    </h3>
+    <script>
+        function makeTopic() {
+            var politicsNouns = ["liberalism","conservatism","socialism","environmentalism","apoliticalism","radicalism","communitarianism","individualism","industrialism","authoritarianism","anarchism"];
+            var politicsAdjectives = ["50s","60s","70s","80's","American","Russian","Chinese","radical","enforced","organic","Marxist","organized","unorganized","technical","reactionary","progressive","militaristic","pacificistic",  "decentralized", "centralized"];
+            var philosophyNouns = ["exsistentialism","stoicism","antinatalism","nihilism","individualism","theologicalism","Kiregekaardism","political religion","consumerism","anti-materalism","technologism"];
+            var philosophyAdjectives = ["50's","60's","70's","80's","90's","futuristic","American","Russian","Chinese","radical","enforced","organic", "decentralized", "centralized","scholarly", "argrarianism", "modernist"];
+            var artNouns = ["impressionism","realism","modernism","romanticism","digitalism"];
+            var artAdjectives = ["modern","retro","50's","60's","70's","80's","90's","American","Russian","Chinese","conceptual","direct"];
+            var architectureNouns = ["house","apartment","townwhouse","greenhouse","skyscraper","government building"];
+            var architectureAdjectives = ["brutalist","suburban", "50s","60's","70's","80's","90's","American","Russian","Chinese","utlitarianist",];
+
+            var selected_option = document.getElementById("topic_chooser").value
+            var adjList = politicsAdjectives;
+            var nounList = politicsNouns;
+            if(selected_option == "Politics") {
+                adjList = politicsAdjectives;
+                nounList = politicsNouns;
+            } else if(selected_option == "Philosophy") {
+                adjList = philosophyAdjectives;
+                nounList = philosophyNouns;
+            } else if (selected_option == "Art") {
+                adjList = artAdjectives;
+                nounList = artNouns;
+            } else if (selected_option == "Architecture") {
+                adjList = architectureAdjectives;
+                nounList = architectureNouns;
+            }
+            document.getElementById("idea").innerHTML = adjList[Math.floor(Math.random()*adjList.length)] + " " + nounList[Math.floor(Math.random()*nounList.length)];
+        }
+    </script>
+</body>
+<html>
