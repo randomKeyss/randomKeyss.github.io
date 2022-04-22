@@ -4,6 +4,7 @@
 :root {
   --fg:     #FDFDFD;
   --fg-m:    whitesmoke;
+  --fg-alt:   #7F7B82;
   --bg:       #212121;
 }
 
@@ -13,6 +14,14 @@ body {
 
 p {
   color: var(--fg);
+}
+
+a {
+  color: var(--fg-alt);
+}
+
+a:hover {
+  color: #434244;
 }
 
 .text-white {
@@ -82,6 +91,10 @@ p {
     height: 100%;
     border-radius: 0 3px 3px 0;
   }
+
+  .card-body {
+    /* background-color: var(--bg); */
+  }
   
   .flex-auto {
     -ms-flex: 0 0 auto;
@@ -102,6 +115,10 @@ p {
   /*
    * Blog name and description
    */
+   .blog-sidebar {
+    /* background-color: #303030; */
+   }
+
   .blog-title {
     margin-bottom: 0;
     font-size: 2rem;
@@ -148,7 +165,7 @@ p {
     padding: 2.5rem 0;
     color: #999;
     text-align: center;
-    background-color: #f9f9f9;
+    background-color: var(--bg);
     border-top: .05rem solid #e5e5e5;
   }
   .blog-footer p:last-child {
