@@ -183,6 +183,6 @@ if (update_main_page):
                     o1 += '<ul><a href="../nightly_illini/stories/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + story + '/index.html">' + title + '</a></ul>'
     out = archive_page_template_split[0] + o1 + archive_page_template_split[1] + o2 + archive_page_template_split[2]
     archive_page.write(out)
-
+    num_files_updated += 1
 
 print("updated " + str(num_files_updated) + " file" + ("" if num_files_updated == 1 else "s"))
