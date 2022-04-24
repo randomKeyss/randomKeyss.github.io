@@ -1,7 +1,8 @@
 import os
 
 b = os.path.dirname(os.path.abspath(__file__))
-print(b)
+monthList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
 print("update main page? (y/n)")
 update_main_page = input().upper() == "Y"
 print("update archives? (y/n)")
@@ -79,7 +80,7 @@ if (update_main_page):
     stories = [name for name in os.listdir(b + '/../stories/' + str(year) + '/' + str(month) + '/' + str(day) + '/')]
     story = stories.pop()
     most_recent_stories.append(b + '/../stories/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + story + '/')
-    while(len(most_recent_stories) < 5):
+    while(len(most_recent_stories) < 7):
         if (len(stories) == 0):
             if (len(days) == 0):
                 if (len(months == 0)):
@@ -112,6 +113,8 @@ if (update_main_page):
     main_page_template_split = main_page_template.read().split("<!>")
     out = ""
     for i in range(4):
+        if i == 2 and story[i] == "":
+                out += monthList[int(most_recent_stories[0].split("/")[-4])-1] + " " + str(int(most_recent_stories[0].split("/")[-3])) + ", " + str(int(most_recent_stories[0].split("/")[-5]))
         out += main_page_template_split[i] + story[i]
     while(i < len(story)):
         out += "\n<br><br>\n" + story[i]
@@ -137,6 +140,8 @@ if (update_main_page):
         this_story = open(most_recent_stories[i] + "/story.txt","r", encoding = "utf-8")
         story = this_story.read().split("\n")
         for j in range(4):
+            if j == 2 and story[j] == "":
+                story_html += monthList[int(most_recent_stories[i].split("/")[-4])-1] + " " + str(int(most_recent_stories[i].split("/")[-3])) + ", " + str(int(most_recent_stories[i].split("/")[-5]))
             story_html += card_template_split[j]
             story_html += story[j]
         while(j < len(story)):
