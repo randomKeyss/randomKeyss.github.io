@@ -116,7 +116,10 @@ if (update_main_page):
     for i in range(4):
         if i == 2 and story[i] == "":
                 out += monthList[int(most_recent_stories[0].split("/")[-4])-1] + " " + str(int(most_recent_stories[0].split("/")[-3])) + ", " + str(int(most_recent_stories[0].split("/")[-5]))
-        out += main_page_template_split[i] + story[i]
+        if i == 0:
+            out += main_page_template_split[i] + "<a href = '" + most_recent_stories[0] + "index.html" + "'>" + story[i] + "</a>"
+        else:
+            out += main_page_template_split[i] + story[i]
     i += 1
     while(i < len(story)):
         out += "\n<br><br>\n" + story[i]
@@ -145,7 +148,10 @@ if (update_main_page):
             if j == 2 and story[j] == "":
                 story_html += monthList[int(most_recent_stories[i].split("/")[-4])-1] + " " + str(int(most_recent_stories[i].split("/")[-3])) + ", " + str(int(most_recent_stories[i].split("/")[-5]))
             story_html += card_template_split[j]
-            story_html += story[j]
+            if j == 0:
+                story_html += "<a href = '" + most_recent_stories[i] + "index.html" + "'>" + story[j] + "</a>"
+            else:
+                story_html += story[j]
         j += 1
         while(j < len(story)):
             story_html += "\n<br><br>\n" + story[j]
