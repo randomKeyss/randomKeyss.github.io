@@ -56,6 +56,7 @@ if (update_archives):
         for i in range(4):
             out += story_template_split[i]
             out += story_split[i]
+        i += 1
         while (i < len(story_split)):
             out += "\n<br><br>\n" + story_split[i]
             i += 1
@@ -116,6 +117,7 @@ if (update_main_page):
         if i == 2 and story[i] == "":
                 out += monthList[int(most_recent_stories[0].split("/")[-4])-1] + " " + str(int(most_recent_stories[0].split("/")[-3])) + ", " + str(int(most_recent_stories[0].split("/")[-5]))
         out += main_page_template_split[i] + story[i]
+    i += 1
     while(i < len(story)):
         out += "\n<br><br>\n" + story[i]
         i += 1
@@ -144,6 +146,7 @@ if (update_main_page):
                 story_html += monthList[int(most_recent_stories[i].split("/")[-4])-1] + " " + str(int(most_recent_stories[i].split("/")[-3])) + ", " + str(int(most_recent_stories[i].split("/")[-5]))
             story_html += card_template_split[j]
             story_html += story[j]
+        j += 1
         while(j < len(story)):
             story_html += "\n<br><br>\n" + story[j]
             j += 1
