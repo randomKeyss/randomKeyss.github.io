@@ -1,7 +1,5 @@
-from ast import Store
 import os
 
-from numpy import append
 b = os.path.dirname(os.path.abspath(__file__))
 print(b)
 print("update main page? (y/n)")
@@ -104,7 +102,6 @@ if (update_main_page):
         story = stories.pop()
         most_recent_stories.append(b + '/../stories/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + story + '/')
     
-    
 
     main_page = open(b + "/../index.html", "w", encoding = "utf-8")
     main_page_template = open(b + "/main_page_template.html", "r", encoding = "utf-8")
@@ -120,6 +117,20 @@ if (update_main_page):
         out += "\n<br><br>\n" + story[i]
         i += 1
     out += main_page_template_split[4]
+
+
+    monthList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    years = [int(name) for name in os.listdir(b + '/../stories/') if name.isdigit()]
+    years.sort(reverse = True)
+    for year in years:
+        months = [int(name) for name in os.listdir(b + '/../stories/' + str(year) + '/') if name.isdigit()]
+        months.sort(reverse = True)
+        for month in months:
+            out += '<li><a href="archive.html#' + monthList[month-1] + str(year) + '">' + monthList[month-1] + ' ' + str(year) + '</a></li>'
+    out += main_page_template_split[5]
+
+
+
     cols = ["",""]
     for i in range(1, len(most_recent_stories)):
         story_html = ""
@@ -135,11 +146,43 @@ if (update_main_page):
         colInd = (i-1)%2
         cols[colInd] += story_html
     out += cols[0]
-    out += main_page_template_split[5]
-    out += cols[1]
     out += main_page_template_split[6]
+    out += cols[1]
+    out += main_page_template_split[7]
     main_page.write(out)
     num_files_updated += 1
+
+
+
+    
+
+
+
+    archive_page = open(b + "/../archive.html", "w", encoding = "utf-8")
+    archive_page_template = open(b + "/archive_template.html", "r", encoding = "utf-8")
+    archive_page_template_split = archive_page_template.read().split("<!>")
+    monthList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    years = [int(name) for name in os.listdir(b + '/../stories/') if name.isdigit()]
+    years.sort(reverse = True)
+    o1 = ""
+    o2 = ""
+    for year in years:
+        months = [int(name) for name in os.listdir(b + '/../stories/' + str(year) + '/') if name.isdigit()]
+        months.sort(reverse = True)
+        for month in months:
+            o1 += '<h1 name="' + monthList[month-1] + str(year) +'">' + monthList[month-1] + ' ' + str(year) + '</h1>\n<br>'
+            o2 += '<a href="#' + monthList[month-1] + str(year) + '">' + monthList[month-1] + ' ' + str(year) + '</a>'
+            days = [name for name in os.listdir(b + '/../stories/' + str(year) + '/' + str(month) + '/') if name.isdigit()]
+            days.reverse()
+            for day in days:
+                stories = [name for name in os.listdir(b + '/../stories/' + str(year) + '/' + str(month) + '/' + str(day) + '/')]
+                for story in stories:
+                    link = b + '/../stories/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + story + '/'
+                    txt_file = open(link + "story.txt", "r", encoding = "utf-8")
+                    title = txt_file.read().split("\n")[0]
+                    o1 += '<ul><a href="../nightly_illini/stories/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + story + '/index.html">' + title + '</a></ul>'
+    out = archive_page_template_split[0] + o1 + archive_page_template_split[1] + o2 + archive_page_template_split[2]
+    archive_page.write(out)
 
 
 print("updated " + str(num_files_updated) + " file" + ("" if num_files_updated == 1 else "s"))
