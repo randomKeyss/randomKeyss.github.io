@@ -194,7 +194,7 @@ if (update_main_page):
                     link = b + '/../stories/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + story + '/'
                     txt_file = open(link + "story.txt", "r", encoding = "utf-8")
                     title = txt_file.read().split("\n")[0]
-                    o1 += '<ul><a href="../nightly_illini/stories/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + story + '/index.html">' + title + '</a></ul>'
+                    o1 += '<ul><a href="stories/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + story + '/index.html">' + title + '</a></ul>'
     out = archive_page_template_split[0] + o1 + archive_page_template_split[1] + o2 + archive_page_template_split[2]
     archive_page.write(out)
     num_files_updated += 1
