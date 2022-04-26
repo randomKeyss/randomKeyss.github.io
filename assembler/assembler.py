@@ -5,65 +5,66 @@ monthList = ["January", "February", "March", "April", "May", "June", "July", "Au
 
 print("update main page? (y/n)")
 update_main_page = input().upper() == "Y"
+print("update pages? (y/n)")
+update_pages = input().upper() == "Y"
 print("update archives? (y/n)")
 update_archives = input().upper() == "Y"
-if (update_archives):
-    print("which year? 'a' for all")
-    year = input()
-    if (year.upper() == 'A'):
-        year = -1
-    year = int(year)
-    print("which month? 'a' for all")
-    month = input()
-    if (month.upper() == 'A'):
-        month = -1
-    month = int(month)
-    print("which day? 'a' for all")
-    day = input()
-    if (day.upper() == 'A'):
-        day = -1
-    day = int(day)
 print("updating...")
 num_files_updated = 0
 
+MONTHSLIST = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+def get_all_pages():
+    all_pages_in_order = []
+    years = [int(name) for name in os.listdir(b + '/../stories/') if name.isdigit()]
+    years.sort()
+    for year in years:
+        months = [int(name) for name in os.listdir(b + '/../stories/' + str(year) + '/') if name.isdigit()]
+        months.sort()
+        for month in months:
+            days = [int(name) for name in os.listdir(b + '/../stories/' + str(year) + '/' + str(month) + '/') if name.isdigit()]
+            for day in days:
+                if (day < 10):
+                    day = "0" + str(day)
+                stories = [name for name in os.listdir(b + '/../stories/' + str(year) + '/' + str(month) + '/' + str(day) + '/')]
+                for story in stories:
+                    story_folder_link = b + '/../stories/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + story + '/'
+                    readable_day = str(int(day))
+                    href_link = 'stories/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + story + '/' + 'index.html'
+                    story_file = open(story_folder_link + "story.txt","r", encoding = "utf-8")
+                    story_data = story_file.read().split("\n")
+                    title = story_data[0]
+                    date = story_data[1]
+                    if (date == ""):
+                        date = monthList[month-1] + " " + readable_day + ", " + str(year)
+                    author = story_data[2]
+                    contents = story_data[3:]
+                    out = [(href_link, story_folder_link),
+                            (title, date, author),
+                            contents]
+                    all_pages_in_order.append(out)
+                    story_file.close()
+    return all_pages_in_order
+ALL_PAGES = get_all_pages() #[(href_link, story_folder_link),
+                            #(title, date, author),
+                            #contents]
+
 if (update_archives):
-    years = [name for name in os.listdir(b + '/../stories/') if name.isdigit()] if year == -1 else [str(year)]
-    months = [str(i) for i in range(1,13)] if month == -1 else [str(month)]
-    days = [str(day)]
-    if day == -1:
-        days = []
-        for i in range(31):
-            day = str(i)
-            if i < 10:
-                day = "0" + day
-            days.append(day)
-    folders_to_update = []
-    for i in years:
-        for j in months:
-            for k in days:
-                path = b + '/../stories/' + str(i) + '/' + str(j) + '/' + str(k) + '/'
-                if (os.path.isdir(path)):
-                    stories = [name for name in os.listdir(path)]
-                    for story in stories:
-                        folders_to_update.append(path + story + '/')
-    for folder in folders_to_update:
-        story_index = open(folder + "index.html", "w", encoding = "utf-8")
-        story_template = open(b + "/story_template.html", "r", encoding = "utf-8")
-        story = open(folder + "story.txt","r", encoding = "utf-8")
-        story_split = story.read().split("\n")
-        story_template_split = story_template.read().split("<!>")
-        out = ""
-        for i in range(4):
-            out += story_template_split[i]
-            out += story_split[i]
-        i += 1
-        while (i < len(story_split)):
-            out += "\n<br><br>\n" + story_split[i]
-            i += 1
+    story_template = open(b + "/story_template.html", "r", encoding = "utf-8")
+    story_template_split = story_template.read().split("<!>")
+    for page in ALL_PAGES:
+        links, metadata, contents = page
+        title, date, author = metadata
+        story_index = open(links[1] + "index.html", "w", encoding = "utf-8")
+        out = story_template_split[0] + title + story_template_split[1] + date + story_template_split[2] + author + story_template_split[3]
+        for i in range(len(contents)):
+            paragraph = contents[i]
+            beginning = "" if i == 0 else "\n<br><br>\n"
+            out += beginning + paragraph
         out += story_template_split[4]
         story_index.write(out)
         num_files_updated += 1
-
+if (update_pages):
+    pass
 if (update_main_page):
     most_recent_stories = []
     years = [int(name) for name in os.listdir(b + '/../stories/') if name.isdigit()]
@@ -127,14 +128,13 @@ if (update_main_page):
     out += main_page_template_split[4]
 
 
-    monthList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     years = [int(name) for name in os.listdir(b + '/../stories/') if name.isdigit()]
     years.sort(reverse = True)
     for year in years:
         months = [int(name) for name in os.listdir(b + '/../stories/' + str(year) + '/') if name.isdigit()]
         months.sort(reverse = True)
         for month in months:
-            out += '<li><a href="archive.html#' + monthList[month-1] + str(year) + '">' + monthList[month-1] + ' ' + str(year) + '</a></li>'
+            out += '<li><a href="archive.html#' + MONTHSLIST[month-1] + str(year) + '">' + MONTHSLIST[month-1] + ' ' + str(year) + '</a></li>'
     out += main_page_template_split[5]
 
 
