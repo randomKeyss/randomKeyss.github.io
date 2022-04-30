@@ -138,7 +138,7 @@ if (update_main_page):
     out += main_page_template_split[5]
 
 
-
+    single_col = ""
     cols = ["",""]
     for i in range(1, len(most_recent_stories)):
         story_html = ""
@@ -159,10 +159,13 @@ if (update_main_page):
         story_html += card_template_split[4]
         colInd = (i-1)%2
         cols[colInd] += story_html
-    out += cols[0]
+        single_col += story_html
+    out += single_col
     out += main_page_template_split[6]
-    out += cols[1]
+    out += cols[0]
     out += main_page_template_split[7]
+    out += cols[1]
+    out += main_page_template_split[8]
     main_page.write(out)
     num_files_updated += 1
 
