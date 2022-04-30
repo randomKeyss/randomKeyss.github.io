@@ -187,7 +187,7 @@ if (update_main_page):
         months = [int(name) for name in os.listdir(b + '/../stories/' + str(year) + '/') if name.isdigit()]
         months.sort(reverse = True)
         for month in months:
-            o1 += '<h1 name="' + monthList[month-1] + str(year) +'">' + monthList[month-1] + ' ' + str(year) + '</h1>\n<br>'
+            o1 += '<h1 id="' + monthList[month-1] + str(year) +'">' + monthList[month-1] + ' ' + str(year) + '</h1>\n<br>'
             o2 += '<a href="#' + monthList[month-1] + str(year) + '">' + monthList[month-1] + ' ' + str(year) + '</a>'
             days = [name for name in os.listdir(b + '/../stories/' + str(year) + '/' + str(month) + '/') if name.isdigit()]
             days.reverse()
