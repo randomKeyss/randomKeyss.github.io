@@ -1,3 +1,4 @@
+from genericpath import isdir
 import os
 
 b = os.path.dirname(os.path.abspath(__file__))
@@ -64,7 +65,16 @@ if (update_archives):
         story_index.write(out)
         num_files_updated += 1
 if (update_pages):
-    pass
+    print(len(ALL_PAGES))
+    for i in range(0,len(ALL_PAGES),7):
+        print(i)
+        if(i+1 >= len(ALL_PAGES) - 1):
+            break
+        pages_to_update = ALL_PAGES[7*i:7*i+1]
+        page_num = i//7 + 1
+        page_path = b + "/../page/" + str(page_num) + "/"
+        if (not os.path.isdir(page_path)):
+            os.mkdir(page_path)
 if (update_main_page):
     most_recent_stories = []
     years = [int(name) for name in os.listdir(b + '/../stories/') if name.isdigit()]
@@ -198,7 +208,7 @@ if (update_main_page):
                     txt_file = open(link + "story.txt", "r", encoding = "utf-8")
                     title = txt_file.read().split("\n")[0]
                     o1 += '<ul><a href="stories/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + story + '/index.html">' + title + '</a></ul>'
-    out = archive_page_template_split[0] + o1 + archive_page_template_split[1] + o2 + archive_page_template_split[2]
+    out = archive_page_template_split[0] + o2 + archive_page_template_split[1] + o1 + archive_page_template_split[2]
     archive_page.write(out)
     num_files_updated += 1
 
