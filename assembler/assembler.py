@@ -14,6 +14,26 @@ print("updating...")
 num_files_updated = 0
 
 MONTHSLIST = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+def story_to_card(story_path):
+    story_html = ""
+    this_story = open(story_path + "/story.txt","r", encoding = "utf-8")
+    card_template = open(b + "/card_template.html", "r", encoding = "utf-8")
+    card_template_split = card_template.read().split("<!>")
+    story = this_story.read().split("\n")
+    for j in range(4):
+        if j == 2 and story[j] == "":
+            story_html += MONTHSLIST[int(story_path.split("/")[-4])-1] + " " + str(int(story_path.split("/")[-3])) + ", " + str(int(story_path.split("/")[-5]))
+        story_html += card_template_split[j]
+        if j == 0:
+            story_html += "<a href = '" + "/".join(story_path.split("/")[-6:]) + "index.html" + "'>" + story[j] + "</a>"
+        else:
+            story_html += story[j]
+    j += 1
+    while(j < len(story)):
+        story_html += "\n<br><br>\n" + story[j]
+        j += 1
+    story_html += card_template_split[4]
+    return story_html
 def get_all_pages():
     all_pages_in_order = []
     years = [int(name) for name in os.listdir(b + '/../stories/') if name.isdigit()]
@@ -27,6 +47,7 @@ def get_all_pages():
                 if (day < 10):
                     day = "0" + str(day)
                 stories = [name for name in os.listdir(b + '/../stories/' + str(year) + '/' + str(month) + '/' + str(day) + '/')]
+                stories.sort(reverse=True)
                 for story in stories:
                     story_folder_link = b + '/../stories/' + str(year) + '/' + str(month) + '/' + str(day) + '/' + story + '/'
                     readable_day = str(int(day))
@@ -39,21 +60,27 @@ def get_all_pages():
                         date = monthList[month-1] + " " + readable_day + ", " + str(year)
                     author = story_data[2]
                     contents = story_data[3:]
+                    story_card = story_to_card(story_folder_link)
                     out = [(href_link, story_folder_link),
                             (title, date, author),
-                            contents]
+                            contents,
+                            story_card]
                     all_pages_in_order.append(out)
                     story_file.close()
     return all_pages_in_order
 ALL_PAGES = get_all_pages() #[(href_link, story_folder_link),
                             #(title, date, author),
-                            #contents]
+                            #contents,
+                            #story_card]
+
+
+
 
 if (update_archives):
     story_template = open(b + "/story_template.html", "r", encoding = "utf-8")
     story_template_split = story_template.read().split("<!>")
     for page in ALL_PAGES:
-        links, metadata, contents = page
+        links, metadata, contents, story_card = page
         title, date, author = metadata
         story_index = open(links[1] + "index.html", "w", encoding = "utf-8")
         out = story_template_split[0] + title + story_template_split[1] + date + story_template_split[2] + author + story_template_split[3]
@@ -65,16 +92,54 @@ if (update_archives):
         story_index.write(out)
         num_files_updated += 1
 if (update_pages):
-    print(len(ALL_PAGES))
+    page_template = open(b + "/old_page_template.html", "r", encoding = "utf-8")
+    page_template_split = page_template.read().split("<!>")
+    card_template = open(b + "/card_template.html", "r", encoding = "utf-8")
+    card_template_split = card_template.read().split("<!>")
     for i in range(0,len(ALL_PAGES),7):
-        print(i)
         if(i+1 >= len(ALL_PAGES) - 1):
             break
-        pages_to_update = ALL_PAGES[7*i:7*i+1]
         page_num = i//7 + 1
         page_path = b + "/../page/" + str(page_num) + "/"
         if (not os.path.isdir(page_path)):
             os.mkdir(page_path)
+        page_index = open(page_path + "/index.html", "w", encoding = "utf-8")
+        out = page_template_split[0] + "../../index.css" + page_template_split[1]
+        single_col = ""
+        cols = ["",""]
+        for j in range(7):
+            story_html = ALL_PAGES[i + j][3]
+            colInd = j % 2
+            cols[colInd] += story_html
+            single_col += story_html
+        out += single_col
+        out += page_template_split[2]
+        out += cols[0]
+        out += page_template_split[3]
+        out += cols[1]
+        out += page_template_split[4]
+        page_index.write(out)
+        num_files_updated += 1
+    all_pages = open(b + "/../all_stories.html", "w", encoding = "utf-8")
+    out = page_template_split[0] + "index.css" + page_template_split[1]
+    single_col = ""
+    cols = ["",""]
+    for i in range(len(ALL_PAGES)-1,-1,-1):
+        story_html = ALL_PAGES[i][3]
+        colInd = i % 2
+        cols[colInd] += story_html
+        single_col += story_html
+    out += single_col
+    out += page_template_split[2]
+    out += cols[1]
+    out += page_template_split[3]
+    out += cols[0]
+    out += page_template_split[4]
+    all_pages.write(out)
+    num_files_updated += 1
+
+
+        
 if (update_main_page):
     most_recent_stories = []
     years = [int(name) for name in os.listdir(b + '/../stories/') if name.isdigit()]
@@ -151,22 +216,7 @@ if (update_main_page):
     single_col = ""
     cols = ["",""]
     for i in range(1, len(most_recent_stories)):
-        story_html = ""
-        this_story = open(most_recent_stories[i] + "/story.txt","r", encoding = "utf-8")
-        story = this_story.read().split("\n")
-        for j in range(4):
-            if j == 2 and story[j] == "":
-                story_html += monthList[int(most_recent_stories[i].split("/")[-4])-1] + " " + str(int(most_recent_stories[i].split("/")[-3])) + ", " + str(int(most_recent_stories[i].split("/")[-5]))
-            story_html += card_template_split[j]
-            if j == 0:
-                story_html += "<a href = '" + "/".join(most_recent_stories[i].split("/")[-6:]) + "index.html" + "'>" + story[j] + "</a>"
-            else:
-                story_html += story[j]
-        j += 1
-        while(j < len(story)):
-            story_html += "\n<br><br>\n" + story[j]
-            j += 1
-        story_html += card_template_split[4]
+        story_html = story_to_card(most_recent_stories[i])
         colInd = (i-1)%2
         cols[colInd] += story_html
         single_col += story_html
