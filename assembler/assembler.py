@@ -160,7 +160,7 @@ if (update_main_page):
     while(len(most_recent_stories) < 7):
         if (len(stories) == 0):
             if (len(days) == 0):
-                if (len(months == 0)):
+                if (len(months) == 0):
                     if (len(years) == 0):
                         print("not enough stories to fill main page")
                         break
