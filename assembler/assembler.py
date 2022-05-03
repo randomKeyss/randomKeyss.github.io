@@ -97,7 +97,7 @@ if (update_pages):
     card_template = open(b + "/card_template.html", "r", encoding = "utf-8")
     card_template_split = card_template.read().split("<!>")
     for i in range(0,len(ALL_PAGES),7):
-        if(i+1 >= len(ALL_PAGES) - 1):
+        if(i+1 >= len(ALL_PAGES) - 2):
             break
         page_num = i//7 + 1
         page_path = b + "/../page/" + str(page_num) + "/"
