@@ -91,7 +91,7 @@ if (update_archives):
         out += story_template_split[4]
         story_index.write(out)
         num_files_updated += 1
-if (update_pages):
+if (False and update_pages):
     page_template = open(b + "/old_page_template.html", "r", encoding = "utf-8")
     page_template_split = page_template.read().split("<!>")
     card_template = open(b + "/card_template.html", "r", encoding = "utf-8")
