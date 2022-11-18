@@ -43,6 +43,7 @@ def get_all_pages():
         months.sort()
         for month in months:
             days = [int(name) for name in os.listdir(b + '/../stories/' + str(year) + '/' + str(month) + '/') if name.isdigit()]
+            days.sort()
             for day in days:
                 if (day < 10):
                     day = "0" + str(day)
@@ -250,6 +251,7 @@ if (update_main_page):
             o1 += '<h1 id="' + monthList[month-1] + str(year) +'">' + monthList[month-1] + ' ' + str(year) + '</h1>\n<br>'
             o2 += '<a href="#' + monthList[month-1] + str(year) + '">' + monthList[month-1] + ' ' + str(year) + '</a>'
             days = [name for name in os.listdir(b + '/../stories/' + str(year) + '/' + str(month) + '/') if name.isdigit()]
+            days.sort()
             days.reverse()
             for day in days:
                 stories = [name for name in os.listdir(b + '/../stories/' + str(year) + '/' + str(month) + '/' + str(day) + '/')]
