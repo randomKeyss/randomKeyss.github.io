@@ -86,16 +86,24 @@ ALL_PAGES = get_all_pages() #[(href_link, story_folder_link),
 if (update_archives):
     story_template = open(b + "/story_template.html", "r", encoding = "utf-8")
     story_template_split = story_template.read().split("<!>")
-    for page in ALL_PAGES:
+    for i,page in enumerate(ALL_PAGES):
         links, metadata, contents, story_card, page_card = page
         title, date, author = metadata
         story_index = open(links[1] + "index.html", "w", encoding = "utf-8")
         out = story_template_split[0] + title + story_template_split[1] + date + story_template_split[2] + author + story_template_split[3]
-        for i in range(len(contents)):
-            paragraph = contents[i]
-            beginning = "" if i == 0 else "\n<br><br>\n"
+        for j in range(len(contents)):
+            paragraph = contents[j]
+            beginning = "" if j == 0 else "\n<br><br>\n"
             out += beginning + paragraph
         out += story_template_split[4]
+        out += ALL_PAGES[0][0][0]
+        out += story_template_split[5]
+        out += ALL_PAGES[max(i-1,0)][0][0]
+        out += story_template_split[6]
+        out += ALL_PAGES[min(len(ALL_PAGES)-1,i+1)][0][0]
+        out += story_template_split[7]
+        out += ALL_PAGES[-1][0][0]
+        out += story_template_split[8]
         story_index.write(out)
         num_files_updated += 1
 if (update_pages):
